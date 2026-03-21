@@ -1,0 +1,32 @@
+RewriteEngine On
+RewriteBase /hackathon/
+
+# Route XAMPP backend requests
+RewriteRule ^back-end/(.*)$ back-end/index.php?url=$1 [QSA,L]
+
+# Serve Next.js static assets (_next folder)
+RewriteRule ^_next/(.*)$ front-end/out/_next/$1 [L]
+
+# Serve from front-end/out for Next.js static files
+RewriteCond %{DOCUMENT_ROOT}/hackathon/front-end/out/$1 -f
+RewriteRule ^(.*)$ front-end/out/$1 [L]
+
+# Handle Next.js App Router RSC payloads for SPA Soft Navigation
+RewriteCond %{HTTP:Rsc} 1 [NC,OR]
+RewriteCond %{HTTP:Next-Router-Prefetch} 1 [NC]
+RewriteCond %{DOCUMENT_ROOT}/hackathon/front-end/out/$1/index.txt -f
+RewriteRule ^(.*)$ front-end/out/$1/index.txt [L]
+
+RewriteCond %{HTTP:Rsc} 1 [NC,OR]
+RewriteCond %{HTTP:Next-Router-Prefetch} 1 [NC]
+RewriteCond %{DOCUMENT_ROOT}/hackathon/front-end/out/$1.txt -f
+RewriteRule ^(.*)$ front-end/out/$1.txt [L]
+
+# Serve standard HTML pages
+RewriteCond %{DOCUMENT_ROOT}/hackathon/front-end/out/$1/index.html -f
+RewriteRule ^(.*)$ front-end/out/$1/index.html [L]
+
+# Fallback to SPA routing if file does not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ front-end/out/index.html [L]
