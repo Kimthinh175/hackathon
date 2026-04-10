@@ -3,8 +3,8 @@ module.exports = {
     {
       name: 'waremax-dashboard',
       script: 'npm',
-      args: 'start',
-      cwd: './',
+      args: 'run start',
+      cwd: 'front-end',
       env: {
         NODE_ENV: 'production',
         PORT: 3000

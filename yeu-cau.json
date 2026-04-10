@@ -1,0 +1,55 @@
+[
+    {
+        "tinh_nang": "Danh mục Hàng hóa (Master Data)",
+        "chi_tiet": [
+            "Quy đổi đơn vị: Nhập kho theo \"Thùng\", Xuất kho theo \"Cái\" (Ví dụ: 1 Thùng = 24 Lon). Hệ thống tự nhân/chia số lượng.",
+            "In mã vạch: Tự động sinh mã Barcode/QR Code cho sản phẩm để dán lên hàng."
+        ]
+    },
+    {
+        "tinh_nang": "Quản lý Kho (Inventory)",
+        "chi_tiet": [
+            "Chuyển kho (Transfer): Chuyển hàng từ Kho A sang Kho B. (Kho A giảm, Kho B tăng, tổng tồn công ty không đổi).",
+            "Kiểm kê (Stocktake): So sánh số tồn trên phần mềm vs số thực tế đếm được. Tự động tạo phiếu \"Cân bằng kho\" (Adjustment) nếu có chênh lệch."
+        ]
+    },
+    {
+        "tinh_nang": "Quản lý Tài sản (Asset)",
+        "chi_tiet": [
+            "Cấp phát & Thu hồi: Ghi nhận lịch sử: \"Ngày 1/1 giao Laptop A cho NV X. Ngày 1/5 thu hồi về kho\".",
+            "Khấu hao (Depreciation): Tính đơn giản: Mua 10 triệu, dùng 5 năm -> Mỗi năm giảm giá trị 2 triệu."
+        ]
+    },
+    {
+        "tinh_nang": "Cảnh báo Tồn kho",
+        "chi_tiet": [
+            "Min/Max: Cài đặt định mức cho từng món. (Min = 10, Max = 100). Dưới Min thì nhắc mua, trên Max thì cảnh báo dư thừa.",
+            "Hạn sử dụng (Expiry): Cảnh báo hàng sắp hết hạn sử dụng (nhất là thực phẩm/thuốc) để ưu tiên xuất trước (FEFO)."
+        ]
+    },
+    {
+        "tinh_nang": "Thẻ kho (Stock Card)",
+        "chi_tiet": [
+            "Truy vết chi tiết: Xem lịch sử biến động của 1 món hàng cụ thể: \"Ngày 1 nhập 10, Ngày 2 xuất 3, Ngày 3 chuyển kho 2... -> Tồn cuối = 5\". (Giống sao kê ngân hàng)."
+        ]
+    },
+    {
+        "tinh_nang": "Vị trí kho (Bin location)",
+        "chi_tiet": [
+            "Sơ đồ kho: Chỉ rõ hàng đang nằm ở Kệ A, Tầng 2, Ô số 5. Giúp thủ kho đi nhặt hàng (Picking) nhanh hơn."
+        ]
+    },
+    {
+        "tinh_nang": "Báo cáo Kho",
+        "chi_tiet": [
+            "Tuổi kho: Món hàng này đã nằm trong kho bao lâu rồi? (Để phát hiện hàng ứ đọng/Slow moving).",
+            "Dự báo: Dựa trên tốc độ xuất kho tháng trước để gợi ý tháng sau cần nhập bao nhiêu."
+        ]
+    },
+    {
+        "tinh_nang": "Ứng dụng di động (Mobile App)",
+        "chi_tiet": [
+            "Quét mã vạch: Dùng camera điện thoại quét Barcode trên sản phẩm để nhập/xuất kho cực nhanh thay vì gõ tay."
+        ]
+    }
+]

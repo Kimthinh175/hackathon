@@ -31,7 +31,8 @@ jobs:
               git pull origin main
             fi
 
-            # Install dependencies
+            # Install dependencies in front-end
+            cd front-end
             npm install --production=false
 
             # Create environmental variables
@@ -40,6 +41,7 @@ jobs:
             # Build the application
             npm run build
 
-            # Restart application with PM2
+            # Restart application with PM2 (located in the root)
+            cd ..
             pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
             pm2 save
