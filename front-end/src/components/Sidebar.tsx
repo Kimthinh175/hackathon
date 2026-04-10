@@ -1,67 +1,63 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
-export default function Sidebar({ roleBasePath }: { roleBasePath: string }) {
-  const pathname = usePathname() || "";
+export default function Sidebar({ userRole }: { userRole: string }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const basePath = userRole === 'Manager' ? '/manager' : '/staff';
 
-  const isActive = (path: string) => {
-    return pathname.includes(path) ? "active" : "";
-  };
-
-  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    window.location.href = href;
-  };
+  const menuItems = [
+    { name: 'Trang chủ', icon: 'fa-house', path: '' },
+    { name: 'Danh sách hàng', icon: 'fa-boxes-stacked', path: '/master-data' },
+    { name: 'Nhập / Xuất hàng', icon: 'fa-truck-ramp-box', path: '/inventory' },
+    { name: 'Quản lý đồ dùng', icon: 'fa-toolbox', path: '/assets' },
+    { name: 'Hàng sắp hết / Hết hạn', icon: 'fa-triangle-exclamation', path: '/alerts' },
+    { name: 'Lịch sử hàng hóa', icon: 'fa-clock-rotate-left', path: '/stock-card' },
+    { name: 'Vị trí kho hàng', icon: 'fa-map-location-dot', path: '/bin-location' },
+    { name: 'Xem báo cáo', icon: 'fa-chart-line', path: '/reports' },
+  ];
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-header border-b border-indigo-700/30 pb-4 mb-4">
-        <i className="fa-solid fa-boxes-stacked logo-icon text-3xl mb-2"></i>
-        <h2 className="text-xl font-bold tracking-wider">WareMax</h2>
-        <div className="text-xs text-indigo-200 mt-1 uppercase tracking-widest">{roleBasePath === '/manager' ? 'MANAGER' : 'STAFF'}</div>
+      <div className="sidebar-header">
+        <div className="logo-container">
+          <i className="fa-solid fa-boxes-packing"></i>
+        </div>
+        <h2>WareMax</h2>
+        <span className="role-badge">{userRole}</span>
       </div>
-      <nav className="nav-menu flex flex-col gap-2">
-        <a href={`/hackathon${roleBasePath}`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive(roleBasePath) && pathname === roleBasePath ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-chart-pie w-5 text-center"></i>
-          <span>Tổng quan</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/master-data`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/master-data`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/master-data') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-database w-5 text-center"></i>
-          <span>Danh mục Hàng hóa</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/inventory`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/inventory`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/inventory') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-dolly w-5 text-center"></i>
-          <span>Quản lý Kho</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/assets`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/assets`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/assets') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-laptop-code w-5 text-center"></i>
-          <span>Quản lý Tài sản</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/alerts`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/alerts`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/alerts') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-bell w-5 text-center"></i>
-          <span>Cảnh báo Tồn kho</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/stock-card`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/stock-card`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/stock-card') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-money-check-dollar w-5 text-center"></i>
-          <span>Thẻ kho</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/bin-location`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/bin-location`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/bin-location') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-map-location-dot w-5 text-center"></i>
-          <span>Vị trí kho</span>
-        </a>
-        <a href={`/hackathon${roleBasePath}/reports`} onClick={(e) => handleNav(e, `/hackathon${roleBasePath}/reports`)} className={`nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-white/10 transition ${isActive('/reports') ? 'bg-white/20 font-bold' : ''}`}>
-          <i className="fa-solid fa-chart-line w-5 text-center"></i>
-          <span>Báo cáo Kho</span>
-        </a>
-      </nav>
       
-      <div className="mt-auto pt-8">
-         <a href="/hackathon/" onClick={(e) => handleNav(e, '/hackathon/')} className="nav-item p-3 flex items-center gap-3 rounded-lg hover:bg-red-500/20 text-red-200 transition">
-          <i className="fa-solid fa-right-from-bracket w-5 text-center"></i>
-          <span>Đăng xuất</span>
-        </a>
+      <nav className="nav-menu">
+        {menuItems.map((item) => {
+          const itemPath = `${basePath}${item.path}`;
+          // Handle dashboard active state
+          const isActive = item.path === '' 
+            ? (pathname === basePath || pathname === `${basePath}/`)
+            : pathname.startsWith(itemPath);
+
+          return (
+            <Link 
+              key={item.name} 
+              href={itemPath} 
+              className={`nav-item ${isActive ? 'active' : ''}`}
+            >
+              <i className={`fa-solid ${item.icon}`}></i>
+              <span>{item.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="mt-auto pt-8 border-t border-gray-100 pb-4">
+        <button 
+           onClick={() => router.push('/')} 
+           className="nav-item text-rose-500 hover:bg-rose-50 transition-colors w-full flex items-center gap-3 px-4 py-3 rounded-lg font-bold"
+        >
+           <i className="fa-solid fa-right-from-bracket"></i>
+           <span>Đăng xuất</span>
+        </button>
       </div>
     </aside>
   );

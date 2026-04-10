@@ -10,7 +10,7 @@ export default function ManagerLayout({
   return (
     <div className="app-container">
       {/* Sidebar Component */}
-      <Sidebar roleBasePath="/manager" />
+      <Sidebar userRole="Manager" />
 
       {/* Main Content Area */}
       <main className="main-content">
@@ -18,7 +18,7 @@ export default function ManagerLayout({
         <Topbar userRole="Manager" />
 
         {/* Dynamic Page Views */}
-        <div className="content-area p-6">
+        <div className="content-area p-2">
           {children}
         </div>
       </main>

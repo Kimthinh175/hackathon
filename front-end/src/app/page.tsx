@@ -9,22 +9,38 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Simulate backend auth logic delay
-    setTimeout(() => {
-        if (username === "admin" || username === "manager") {
-            router.push("/manager");
-        } else if (username === "staff" || username === "nhanvien") {
-            router.push("/staff");
+    try {
+      const res = await fetch('/hackathon/api/auth/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        // Redirect based on role
+        if (data.user.role === 'Manager') {
+          router.push('/manager');
         } else {
-            setError("Tên đăng nhập không hợp lệ. Vui lòng dùng 'admin' hoặc 'staff'.");
-            setLoading(false);
+          router.push('/staff');
         }
-    }, 600);
+      } else {
+        setError(data.error || 'Đăng nhập thất bại.');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Không thể kết nối đến máy chủ.');
+      setLoading(false);
+    }
   };
 
   return (

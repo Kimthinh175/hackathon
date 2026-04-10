@@ -2,112 +2,135 @@
 import React, { useEffect, useState } from "react";
 
 export default function Reports() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+    const [reports, setReports] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('/hackathon/back-end/reports')
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'success') {
-          setData(res.data);
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Fetch error:", err);
-        setLoading(false);
-      });
-  }, []);
+    useEffect(() => {
+        fetch('/hackathon/api/reports')
+            .then(res => res.json())
+            .then(data => {
+                setReports(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Lỗi:", err);
+                setLoading(false);
+            });
+    }, []);
 
-  const getStatusClass = (status: string) => {
-    if (status === 'Trống') return 'status-empty';
-    if (status === 'Có hàng') return 'status-occ';
-    if (status === 'Đầy') return 'status-full';
-    return '';
-  };
-
-  return (
-    <section id="reports" className="view-section animate-fade-in">
-        <div className="page-header text-white bg-indigo-600 p-8 rounded-2xl mb-8 shadow-lg">
-            <h2 className="text-3xl font-black">Báo cáo Quản trị Kho</h2>
-            <p className="text-indigo-100 opacity-80 mt-2 font-medium">Phân tích dữ liệu & Dự báo thông minh bằng AI</p>
+    if (loading) return (
+        <div className="p-20 text-center flex flex-col items-center gap-6">
+            <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-indigo-600 font-black text-xl tracking-widest uppercase">Đang kết xuất Báo cáo AI WareMax...</p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Top Movers */}
-            <div className="card shadow-xl border-none">
-                <div className="card-header border-b border-gray-50 p-6 flex justify-between items-center bg-gray-50/30">
-                    <h3 className="font-bold text-gray-800 text-lg">Sản phẩm xuất nhiều (Top Movers)</h3>
-                    <span className="badge-status bg-green text-green-dark !py-1 !px-4 text-[10px] font-black uppercase tracking-widest">Hot Items</span>
+    );
+
+    return (
+        <section id="reports" className="view-section animate-up">
+            <div className="page-header mb-12">
+                <div>
+                  <h2 className="text-3xl font-black text-gray-800 tracking-tight">Trung tâm Phân tích AI & Dự báo</h2>
+                  <p className="text-gray-400 font-bold text-sm tracking-widest uppercase mt-1">Sử dụng thuật toán máy học để tối ưu hóa tồn kho</p>
                 </div>
-                <div className="p-8">
-                    {loading ? (
-                       <div className="flex flex-col items-center justify-center py-20 gap-4">
-                          <div className="w-10 h-10 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
-                          <p className="text-gray-400 font-bold">Đang phân tích...</p>
-                       </div>
-                    ) : (
-                      <div className="space-y-6">
-                         {data?.top_movers?.map((item: any, idx: number) => (
-                            <div key={idx} className="flex items-center gap-6 group">
-                               <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center font-black text-indigo-600 text-lg group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-                                  #{idx+1}
-                               </div>
-                               <div className="flex-1">
-                                  <div className="flex justify-between items-center mb-2">
-                                     <span className="font-black text-gray-700">{item.name}</span>
-                                     <span className="text-sm font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">{item.qty} lượt xuất</span>
-                                  </div>
-                                  <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
-                                     <div className="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full transition-all duration-1000" style={{ width: `${(item.qty/data.top_movers[0].qty) * 100}%` }}></div>
-                                  </div>
-                               </div>
-                            </div>
-                         ))}
-                      </div>
-                    )}
+                <div className="flex gap-4">
+                    <div className="bg-emerald-50 px-6 py-3 rounded-2xl border border-emerald-100 flex items-center gap-3 shadow-sm">
+                        <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
+                        <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">AI Engine: Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                {/* Slow moving - Widget lớn */}
+                <div className="card lg:col-span-1 p-10 bg-white shadow-2xl relative overflow-hidden group border border-gray-50">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
+                    
+                    <h3 className="text-lg font-black text-gray-800 mb-10 border-l-[6px] border-orange-500 pl-4 uppercase tracking-tighter">Chỉ số Tuổi kho (ODD)</h3>
+
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="w-48 h-48 rounded-full border-[14px] border-orange-50 flex items-center justify-center relative shadow-inner">
+                            <span className="text-5xl text-orange-600 font-black tracking-tighter">{reports?.slowMoving?.percent}%</span>
+                            <div className="absolute inset-0 rounded-full border-[14px] border-orange-500 border-t-transparent border-r-transparent -rotate-45 shadow-sm"></div>
+                        </div>
+                        <p className="mt-10 text-gray-500 text-center text-sm font-medium leading-relaxed px-2">
+                           Sử dụng phương pháp <span className="font-bold underline">FEFO</span>, hệ thống phát hiện <span className="text-orange-600 font-black">{reports?.slowMoving?.percent}%</span> hàng hóa chưa phát sinh giao dịch trong <span className="font-black">90 ngày</span>.
+                        </p>
+                    </div>
+
+                    <div className="mt-12 bg-gray-50 rounded-3xl p-6 border border-gray-100">
+                        <div className="flex justify-between items-center mb-6">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Số SKU quá hạn nhãn</span>
+                            <span className="text-2xl font-black text-orange-600">{reports?.slowMoving?.count}</span>
+                        </div>
+                        <button className="w-full bg-orange-600 text-white py-4 rounded-2xl font-black text-xs shadow-xl shadow-orange-100 hover:-translate-y-1 transition duration-300">
+                             LÊN KẾ HOẠCH XẢ KHO
+                        </button>
+                    </div>
+                </div>
+
+                {/* AI Forecast - Bảng chi tiết */}
+                <div className="card lg:col-span-2 p-10 shadow-xl border border-indigo-50 bg-white">
+                    <div className="flex justify-between items-center mb-10">
+                        <h3 className="text-lg font-black text-gray-800 border-l-[6px] border-indigo-600 pl-4 uppercase tracking-tighter">Dự báo Tiêu thụ & Đề xuất (Forecast)</h3>
+                    </div>
+
+                    <div className="overflow-hidden rounded-3xl border border-gray-100">
+                        <table className="w-full text-left">
+                            <thead className="bg-indigo-600 text-white">
+                                <tr>
+                                    <th className="py-5 px-6 text-[10px] font-black uppercase tracking-widest">Sản phẩm phân tích</th>
+                                    <th className="py-5 text-[10px] font-black uppercase tracking-widest text-center">Tiêu thụ (30d)</th>
+                                    <th className="py-5 text-[10px] font-black uppercase tracking-widest text-center">Tồn khả dụng</th>
+                                    <th className="py-5 px-6 text-[10px] font-black uppercase tracking-widest text-right">Khuyến nghị AI</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-50">
+                                {reports?.forecast?.map((item: any, idx: number) => (
+                                    <tr key={idx} className="hover:bg-indigo-50/20 transition-colors">
+                                        <td className="p-6">
+                                            <div className="font-black text-gray-800 uppercase text-sm tracking-tight">{item.product.name}</div>
+                                            <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">{item.product.sku}</div>
+                                        </td>
+                                        <td className="p-6 text-center text-sm font-black text-emerald-600">
+                                            <i className="fa-solid fa-arrow-trend-up mr-2"></i>{item.velocity}
+                                        </td>
+                                        <td className="p-6 text-center font-black text-gray-600 text-sm">{item.currentStock} {item.product.exportUnit}</td>
+                                        <td className="p-6 text-right">
+                                            {item.suggested > 0 ? 
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <span className="bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded shadow-sm tracking-widest">MUA THÊM</span>
+                                                    <span className="text-emerald-500 font-black text-lg tracking-tighter">+{item.suggested}</span>
+                                                </div>
+                                                :
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <span className="bg-gray-400 text-white text-[9px] font-black px-2 py-0.5 rounded shadow-sm tracking-widest">DUY TRÌ</span>
+                                                    <span className="text-gray-400 font-black text-xs">TỒN AN TOÀN</span>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
-            {/* Forecast */}
-            <div className="card shadow-xl border-none">
-                <div className="card-header border-b border-gray-50 p-6 flex justify-between items-center bg-gray-50/30">
-                    <h3 className="font-bold text-gray-800 text-lg">Dự báo nhập hàng (AI Forecast)</h3>
-                    <div className="flex items-center gap-2 text-indigo-600">
-                      <i className="fa-solid fa-microchip-ai animate-pulse"></i>
-                      <span className="text-[10px] font-black uppercase">Core v4.0 Active</span>
+            <div className="mt-10 card p-8 bg-indigo-900 text-white relative overflow-hidden shadow-2xl">
+                <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-white/5 skew-x-[-20deg] translate-x-12"></div>
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-3xl">
+                            <i className="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div>
+                            <h4 className="text-xl font-black italic tracking-tight">WareMax Intelligence Hub</h4>
+                            <p className="opacity-60 text-[10px] font-black uppercase tracking-widest">Phát triển bởi đội ngũ kỹ sư AI tại Hackathon WareMax</p>
+                        </div>
                     </div>
-                </div>
-                <div className="table-responsive">
-                  <table className="data-table">
-                      <thead>
-                          <tr>
-                              <th className="!bg-transparent text-gray-400">Mã Hàng</th>
-                              <th className="!bg-transparent text-right text-gray-400">Tốc độ xuất</th>
-                              <th className="!bg-transparent text-right text-gray-400">Tồn kho</th>
-                              <th className="!bg-transparent text-right text-gray-400">Gợi ý nhập</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {loading ? (
-                            <tr><td colSpan={4} className="text-center py-20 text-gray-400 font-bold italic">Đang chạy mô hình dự báo...</td></tr>
-                          ) : data?.forecast?.map((item: any, idx: number) => (
-                            <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                                <td><span className="font-black text-gray-800">{item.id}</span></td>
-                                <td className="text-right text-sm font-bold text-gray-500">{item.rate} / tháng</td>
-                                <td className="text-right font-black text-gray-700">{item.stock}</td>
-                                <td className="text-right">
-                                  <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-sm ${item.suggest === 'Không nhập' ? 'bg-red-50 text-red-500 border border-red-100' : 'bg-indigo-600 text-white'}`}>
-                                    {item.suggest}
-                                  </span>
-                                </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                  </table>
+                    <button className="bg-emerald-500 text-white px-10 py-4 rounded-2xl font-black text-sm shadow-xl shadow-emerald-950/20 hover:scale-105 hover:bg-emerald-400 transition active:scale-95">CHIẾT XUẤT BÁO CÁO FULL</button>
                 </div>
             </div>
-        </div>
-    </section>
-  );
+        </section>
+    );
 }

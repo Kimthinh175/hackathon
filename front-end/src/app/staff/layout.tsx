@@ -2,7 +2,7 @@ import React from 'react';
 import Sidebar from '@/components/Sidebar';
 import Topbar from '@/components/Topbar';
 
-export default function StaffLayout({
+export default function ManagerLayout({
   children,
 }: {
   children: React.ReactNode
@@ -10,7 +10,7 @@ export default function StaffLayout({
   return (
     <div className="app-container">
       {/* Sidebar Component */}
-      <Sidebar roleBasePath="/staff" />
+      <Sidebar userRole="Staff" />
 
       {/* Main Content Area */}
       <main className="main-content">
