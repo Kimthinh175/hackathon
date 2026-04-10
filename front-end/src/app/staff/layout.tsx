@@ -18,7 +18,7 @@ export default function ManagerLayout({
         <Topbar userRole="Staff" />
 
         {/* Dynamic Page Views */}
-        <div className="content-area p-6">
+        <div className="content-area">
           {children}
         </div>
       </main>
