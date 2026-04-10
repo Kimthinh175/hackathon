@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/mongodb';
-import { Asset } from '@/models/Asset';
+import { Asset, AssetStatus } from '@/models/Asset';
 import { AssetAllocation } from '@/models/AssetAllocation';
 
 export async function GET() {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     if (!asset) return NextResponse.json({ error: "Không tìm thấy Tài sản" }, { status: 404 });
 
     if (action === 'ALLOCATE') {
-        asset.currentStatus = 'IN_USE';
+        asset.currentStatus = AssetStatus.IN_USE;
         await asset.save();
         await AssetAllocation.create({
             assetId,
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
             condition: condition || 'Tốt'
         });
     } else if (action === 'RETURN') {
-        asset.currentStatus = 'IN_STOCK';
+        asset.currentStatus = AssetStatus.IN_STOCK;
         await asset.save();
         // Cập nhật record cuối đang IN_USE
         const allocation = await AssetAllocation.findOne({ assetId, returnedDate: { $exists: false } }).sort({ assignedDate: -1 });
