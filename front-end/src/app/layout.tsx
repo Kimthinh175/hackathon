@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import './custom.css'
-import Navigation from '@/components/Navigation'
 
 export const metadata: Metadata = {
-  title: 'Warehouse & Assets SPA',
-  description: 'Hackathon Project Frontend',
+  title: 'WareMax - Hệ thống Quản lý Kho & Tài sản',
+  description: 'WareMax Warehouse & Asset Management System',
 }
 
 export default function RootLayout({
@@ -14,12 +13,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning>
       <head>
-          <title>Warehouse & Assets SPA</title>
+          <title>WareMax</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans antialiased text-gray-900 bg-gray-50 min-h-screen m-0 p-0" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         {children}
       </body>
     </html>
